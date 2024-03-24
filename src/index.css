@@ -1,13 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-size: 1.25rem;
+  color: #333;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.input-field {
+  width: 100%;
+}
+
+.input-field label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.input-field input {
+  font-size: 1rem;
+}
+
+.input-field input::placeholder {
+  color: #ccc;
+}
+
+input[type="radio"] {
+  background-color: currentColor;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 0.55em 0.55em;
+
+  border: 1px solid #ccc;
+
+  appearance: none;
+  border-radius: 50%;
+
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+}
+
+input[type="radio"]:checked {
+  background-size: 1rem 1rem;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yNCA0LjY4NWwtMTYuMzI3IDE3LjMxNS03LjY3My05LjA1NC43NjEtLjY0OCA2Ljk1IDguMjAzIDE1LjU2MS0xNi41MDEuNzI4LjY4NXoiLz48L3N2Zz4=");
+  background-repeat: no-repeat;
+  background-position: 50%;
 }
