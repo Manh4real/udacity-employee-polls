@@ -39,7 +39,7 @@ export const Home = () => {
         </div>
       </div>
 
-      {toggle ? (
+      {!toggle ? (
         <PollList title="New Questions" list={newPolls} />
       ) : (
         <PollList title="Done" list={answereedPolls} />
