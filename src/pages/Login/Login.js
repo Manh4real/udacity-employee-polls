@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { getButtonClasses } from "../../common/button";
@@ -15,6 +15,7 @@ export const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -30,7 +31,12 @@ export const Login = () => {
           return;
         }
 
-        navigate(routes.home);
+        const path =
+          location.state?.prevPath && location.state?.prevPath !== routes.login
+            ? location.state?.prevPath
+            : routes.home;
+
+        navigate(path || routes.home);
       });
   };
 

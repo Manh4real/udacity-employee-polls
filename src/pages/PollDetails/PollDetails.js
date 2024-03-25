@@ -5,6 +5,7 @@ import { asyncAnswer, selectPoll } from "../../features/poll";
 import { useParams } from "react-router-dom";
 import { selectUser } from "../../features/auth";
 import { PollOption } from "./PollOption";
+import { NotFound } from "../NotFound/NotFound";
 
 export const PollDetails = () => {
   const { id: pollId } = useParams();
@@ -36,7 +37,7 @@ export const PollDetails = () => {
     setOption(user?.answers[poll?.id]);
   }, [user, poll]);
 
-  if (!poll) return <h3 className="font-semibold text-lg">Cannot find poll</h3>;
+  if (!poll) return <NotFound />;
 
   return (
     <div className="flex flex-col items-center">

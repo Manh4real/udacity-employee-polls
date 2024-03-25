@@ -30,30 +30,21 @@ const getUser = async (username, password) => {
 export const loginThunk = createAsyncThunk(
   "login",
   async (payload, thunkAPI, options) => {
-    const cachedUser = localStorage.getItem("user");
-    const cached = cachedUser && JSON.parse(cachedUser);
-
-    const getAndSaveUserInStorage = async (username, password) => {
+    const getUserAndRefreshPolls = async (username, password) => {
       const found = await getUser(username, password);
 
-      localStorage.setItem("user", JSON.stringify(found));
       thunkAPI.dispatch(asyncGetAllPolls());
 
       return found;
     };
 
-    if (cached && payload && payload.refresh) {
-      return await getAndSaveUserInStorage(cached.id, cached.password);
-    }
-
-    if (cached) {
-      thunkAPI.dispatch(asyncGetAllPolls());
-      return cached;
+    if (payload && payload.refresh) {
+      return await getUserAndRefreshPolls();
     }
 
     const { username, password } = payload;
 
-    return await getAndSaveUserInStorage(username, password);
+    return await getUserAndRefreshPolls(username, password);
   }
 );
 
@@ -68,6 +59,36 @@ export const logoutThunk = createAsyncThunk(
   }
 );
 
+export const asyncRefreshUser = createAsyncThunk(
+  "refreshUser",
+  async (payload, thunkAPI, options) => {
+    try {
+      const currentUser = thunkAPI.getState().auth.user;
+
+      console.log(thunkAPI.getState());
+
+      if (!currentUser)
+        return {
+          error: "Please login",
+        };
+
+      const users = await API._getUsers();
+      const found = users[currentUser.id];
+
+      if (!found)
+        return {
+          error: "Failed to refresh user",
+        };
+
+      return { ...found };
+    } catch (err) {}
+
+    return {
+      error: "Unexpected error",
+    };
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -76,13 +97,16 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload));
     },
   },
   extraReducers: (builder) =>
-    builder.addCase(loginThunk.fulfilled, (state, action) => {
-      state.user = action.payload;
-    }),
+    builder
+      .addCase(loginThunk.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(asyncRefreshUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+      }),
 });
 
 export const { setUser } = authSlice.actions;

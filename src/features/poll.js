@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as API from "../_DATA";
-import { loginThunk } from "./auth";
+import { asyncRefreshUser } from "./auth";
 import { asyncGetAllUsers } from "./users";
 
 export const asyncGetAllPolls = createAsyncThunk(
@@ -47,11 +47,7 @@ export const asyncAnswer = createAsyncThunk(
       await API._saveQuestionAnswer({ ...payload });
 
       // Refresh data
-      thunkAPI.dispatch(
-        loginThunk({
-          refresh: true,
-        })
-      );
+      thunkAPI.dispatch(asyncRefreshUser());
       thunkAPI.dispatch(asyncGetAllPolls());
 
       return null;
